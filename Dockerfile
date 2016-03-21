@@ -12,18 +12,18 @@ VOLUME /conf/nginx/     # place for htpasswd.users
 VOLUME /data            # elasticsearch data
 VOLUME /tls/            # cerstificate paths
 
-RUN sudo apt-get -qqy update && apt-get install -qqy \
+RUN apt-get -qqy update && apt-get install -qqy \
                                                 unzip \
                                                 wget \
                                                 curl \
                                                 openjdk-7-jdk
 
-RUN wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-RUN echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
-RUN echo "deb http://packages.elastic.co/kibana/4.4/debian stable main" | sudo tee -a /etc/apt/sources.list.d/kibana-4.4.x.list
-RUN echo "deb http://packages.elastic.co/logstash/2.2/debian stable main" | sudo tee /etc/apt/sources.list.d/logstash-2.2.x.list
+RUN wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+RUN echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" | tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
+RUN echo "deb http://packages.elastic.co/kibana/4.4/debian stable main" | tee -a /etc/apt/sources.list.d/kibana-4.4.x.list
+RUN echo "deb http://packages.elastic.co/logstash/2.2/debian stable main" | tee /etc/apt/sources.list.d/logstash-2.2.x.list
 
-RUN sudo apt-get -qqy update && apt-get install -qqy \
+RUN apt-get -qqy update && apt-get install -qqy \
                                                 elasticsearch \
                                                 kibana \
                                                 nginx \
@@ -53,7 +53,7 @@ CMD test "$(ls /conf/nginx/htpasswd.users)" || touch /conf/nginx/htpasswd.users;
     service elasticsearch start; sleep 2; \
     service kibana start; \
     service nginx start; \
-    service logstash start; \
+    service logstash start; sleep 2; \
     tail -f /var/log/elasticsearch/elasticsearch.log \
             /var/log/logstash/logstash.log \
             /var/log/kibana/kibana.stdout \
