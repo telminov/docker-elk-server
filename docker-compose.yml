@@ -6,6 +6,15 @@ services:
      - "8051:80"
      - "5044:5044"
     volumes:
-     - /var/docker/elk_server/data:/data
      - /var/docker/elk_server/conf/nginx:/conf/nginx
+     - /var/docker/elk_server/data:/data
      - /var/docker/elk_server/tls:/tls
+
+#  elk-agent:
+#    image: telminov/elk-agent
+#    volumes:
+#     - /var/docker/elk_agent/conf/:/conf/
+#     - /var/docker/elk_agent/tls:/tls
+#     - /var/log:/log/localhost
+#    depends_on:
+#      - elk-server

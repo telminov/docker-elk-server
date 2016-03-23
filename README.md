@@ -25,3 +25,8 @@ For load filebeat index template to elastic search:
 ```
 docker exec -ti elk-server bash -c "curl -XPUT 'http://localhost:9200/_template/filebeat?pretty' -d@filebeat-index-template.json"
 ```
+
+For load topbeat index template to elastic search:
+```
+docker exec -ti elk-server bash -c "curl -XPUT 'http://localhost:9200/_template/topbeat' -d@topbeat.template.json"
+```

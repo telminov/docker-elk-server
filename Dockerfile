@@ -46,6 +46,7 @@ RUN rm beats-dashboards-*.zip
 RUN mv beats-dashboards-* beats-dashboards
 
 RUN curl -O https://gist.githubusercontent.com/thisismitch/3429023e8438cc25b86c/raw/d8c479e2a1adcea8b1fe86570e42abab0f10f364/filebeat-index-template.json
+RUN curl -O https://raw.githubusercontent.com/elastic/topbeat/master/etc/topbeat.template.json
 
 
 CMD test "$(ls /conf/nginx/htpasswd.users)" || touch /conf/nginx/htpasswd.users; \
