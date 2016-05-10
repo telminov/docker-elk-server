@@ -53,7 +53,8 @@ CMD test "$(ls /conf/nginx/htpasswd.users)" || touch /conf/nginx/htpasswd.users;
     test "$(ls /conf/logstash/*)" || cp /etc/logstash/conf-sample/* /conf/logstash/; \
     rm -rf /etc/logstash/conf.d/*; cp /conf/logstash/* /etc/logstash/conf.d/; \
     mkdir /data/elasticsearch; chown -R elasticsearch:elasticsearch /data; \
-    chown -R www-data:www-data  /conf/nginx/; \
+    chown -R www-data:www-data /conf/nginx/; \
+    chown -R logstash:logstash /tls/; \
     service elasticsearch start; sleep 2; \
     service kibana start; \
     service nginx start; \
