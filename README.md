@@ -8,6 +8,11 @@ mkdir -p /var/docker/elk_server/conf/nginx/
 htpasswd -c /var/docker/elk_server/conf/nginx/htpasswd.users admin
 ```
 
+Logstash configs
+```
+mkdir -p /var/docker/elk_server/conf/logstash
+```
+
 Generate certificates for filebeat like
 ```
 mkdir -p /var/docker/elk_server/tls/certs

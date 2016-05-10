@@ -3,10 +3,11 @@ services:
   elk-server:
     image: telminov/elk-server
     ports:
-     - "8051:80"
-     - "5044:5044"
+     - "0.0.0.0:5601:80"
+     - "0.0.0.0:5044:5044"
     volumes:
      - /var/docker/elk_server/conf/nginx:/conf/nginx
+     - /var/docker/elk_server/conf/logstash:/conf/logstash
      - /var/docker/elk_server/data:/data
      - /var/docker/elk_server/tls:/tls
 

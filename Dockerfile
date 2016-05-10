@@ -9,10 +9,12 @@ EXPOSE 80
 EXPOSE 5044
 
 VOLUME /conf/nginx/     # place for htpasswd.users
+VOLUME /conf/logstash/  # place for logstash configs
 VOLUME /data            # elasticsearch data
 VOLUME /tls/            # cerstificate paths
 
 RUN apt-get -qqy update && apt-get install -qqy \
+                                                vim \
                                                 unzip \
                                                 wget \
                                                 curl \
@@ -36,21 +38,22 @@ RUN sed -i 's/.*server\.host.*/server.host: localhost/' /opt/kibana/config/kiban
 RUN rm /etc/nginx/sites-enabled/default
 ADD nginx/kibana /etc/nginx/sites-enabled/kibana
 
-ADD logstash/02-beats-input.conf /etc/logstash/conf.d/02-beats-input.conf
-ADD logstash/10-syslog-filter.conf /etc/logstash/conf.d/10-syslog-filter.conf
-ADD logstash/30-elasticsearch-output.conf /etc/logstash/conf.d/30-elasticsearch-output.conf
+ADD  logstash /etc/logstash/conf-sample
 
 RUN curl -L -O https://download.elastic.co/beats/dashboards/beats-dashboards-1.1.0.zip
 RUN unzip beats-dashboards-*.zip
 RUN rm beats-dashboards-*.zip
 RUN mv beats-dashboards-* beats-dashboards
 
-RUN curl -O https://gist.githubusercontent.com/thisismitch/3429023e8438cc25b86c/raw/d8c479e2a1adcea8b1fe86570e42abab0f10f364/filebeat-index-template.json
-RUN curl -O https://raw.githubusercontent.com/elastic/topbeat/master/etc/topbeat.template.json
+ADD elasticsearch/filebeat-index-template.json filebeat-index-template.json
+ADD elasticsearch/topbeat.template.json topbeat.template.json
 
 
 CMD test "$(ls /conf/nginx/htpasswd.users)" || touch /conf/nginx/htpasswd.users; \
-    mkdir /data/elasticsearch; chown elasticsearch:elasticsearch /data/elasticsearch; \
+    test "$(ls /conf/logstash/*)" || cp /etc/logstash/conf-sample/* /conf/logstash/; \
+    rm -rf /etc/logstash/conf.d/*; cp /conf/logstash/* /etc/logstash/conf.d/; \
+    mkdir /data/elasticsearch; chown -R elasticsearch:elasticsearch /data; \
+    chown -R www-data:www-data  /conf/nginx/; \
     service elasticsearch start; sleep 2; \
     service kibana start; \
     service nginx start; \
