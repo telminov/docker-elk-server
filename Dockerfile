@@ -7,6 +7,8 @@ MAINTAINER telminov@soft-way.biz
 EXPOSE 80
 # logstash beat input
 EXPOSE 5044
+# elasticsearch port
+EXPOSE 9200
 
 VOLUME /conf/nginx/     # place for htpasswd.users
 VOLUME /conf/logstash/  # place for logstash configs
